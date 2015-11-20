@@ -8,20 +8,34 @@ import psycopg2
 
 def connect():
     """Connect to the PostgreSQL database.  Returns a database connection."""
-    return psycopg2.connect("dbname=tournament")
+    return psycopg2.connect("dbname='tournament'")
 
 
 def deleteMatches():
     """Remove all the match records from the database."""
+    conn = connect()
+    c = conn.cursor()
+    c.execute('''drop table matches;''')
+    conn.commit()
+    conn.close()
 
 
 def deletePlayers():
     """Remove all the player records from the database."""
+    conn = connect()
+    c = conn.cursor()
+    c.execute('''drop table players;''')
+    conn.commit()
+    conn.close()
 
 
 def countPlayers():
     """Returns the number of players currently registered."""
-
+    conn = connect()
+    c = conn.cursor()
+    c.execute('''select count(*) as totalPlayers from players;''')
+    conn.commit()
+    conn.close()
 
 def registerPlayer(name):
     """Adds a player to the tournament database.
@@ -32,7 +46,12 @@ def registerPlayer(name):
     Args:
       name: the player's full name (need not be unique).
     """
-
+    conn = connect()
+    c = conn.cursor()
+    c.execute('''insert into players (DEFAULT,'name','0','0') values (%s,%s,%s);''' % ('name' ,'0','0'))
+    results = c.fetchall()
+    conn.commit()
+    conn.close()
 
 def playerStandings():
     """Returns a list of the players and their win records, sorted by wins.
@@ -47,6 +66,14 @@ def playerStandings():
         wins: the number of matches the player has won
         matches: the number of matches the player has played
     """
+    conn = connect()
+    c = conn.cursor()
+    c.execute('''SELECT id_number, name, win, win + lose as roundsPlayed from players order by win desc;''')
+    results = c.fetchall()
+    print "PlayerStandings is returning: {}".format(results)
+    conn.commit()
+    conn.close()
+    return results
 
 
 def reportMatch(winner, loser):

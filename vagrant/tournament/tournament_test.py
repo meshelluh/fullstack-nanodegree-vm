@@ -4,6 +4,12 @@
 
 from tournament import *
 
+def testConnect():
+    try:
+        connect()
+    except:
+        print "Can't connect to DB"
+
 def testDeleteMatches():
     deleteMatches()
     print "1. Old matches can be deleted."
@@ -126,6 +132,7 @@ def testPairings():
 
 
 if __name__ == '__main__':
+    testConnect()
     testDeleteMatches()
     testDelete()
     testCount()

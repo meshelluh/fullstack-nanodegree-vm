@@ -6,4 +6,19 @@
 -- You can write comments in this file by starting them with two dashes, like
 -- these lines here.
 
+\c vagrant
+DROP DATABASE IF EXISTS tournament;
+CREATE DATABASE tournament;
+\c tournament
+CREATE TABLE players (
+	id_number serial primary key,
+	name text,
+	win int,
+	lose int
+);
 
+CREATE TABLE matches (
+	match_id_number serial,
+	winner  text,
+	loser text
+);
