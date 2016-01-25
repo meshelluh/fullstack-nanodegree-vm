@@ -9,17 +9,19 @@
 -- then type: CREATE DATABASE tournament;
 -- \i tournament.sql
 -- \q
+DROP database if exists tournament;
+CREATE database tournament;
 
 \c tournament;
 
-CREATE TABLE players (
+CREATE TABLE Players (
 	id_number serial primary key,
 	name varchar (255),
-	win int,
-	lose int
+	win int default 0,
+	lose int default 0
 );
 
-CREATE TABLE matches (
+CREATE TABLE Matches (
 	match_id_number serial primary key,
 	winner  int references players(id_number),
 	loser int references players(id_number)

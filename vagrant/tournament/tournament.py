@@ -20,7 +20,7 @@ def deleteMatches():
     """Remove all the match records from the database."""
     conn = connect()
     c = conn.cursor()
-    c.execute("DELETE FROM matches")
+    c.execute("DELETE FROM Matches")
     conn.commit()
     conn.close();
 
@@ -29,7 +29,7 @@ def deletePlayers():
     """Remove all the player records from the database."""
     conn = connect()
     c = conn.cursor()
-    c.execute("DELETE FROM players")
+    c.execute("DELETE FROM Players")
     conn.commit()
     conn.close();
 
@@ -38,7 +38,7 @@ def countPlayers():
     """Returns the number of players currently registered."""
     conn = connect()
     c = conn.cursor()
-    c.execute("select count(*) as totalPlayers from players;")
+    c.execute("select count(*) as totalPlayers from Players;")
     rows = c.fetchall()
     conn.commit()
     conn.close()
@@ -55,7 +55,7 @@ def registerPlayer(name):
     """
     db = connect()
     c = db.cursor()
-    c.execute("INSERT INTO Players (name) VALUES (%s)",(name,))
+    c.execute("INSERT INTO Players VALUES (DEFAULT, %s, DEFAULT, DEFAULT)",(name,))
     db.commit()
     db.close();
 
@@ -72,7 +72,7 @@ def playerStandings():
     """
     db = connect()
     c = db.cursor()
-    c.execute("SELECT id_number, name, win, win + lose as roundsPlayed from players order by win desc;")
+    c.execute("SELECT id_number, name, win, win + lose as roundsPlayed from Players order by win desc;")
     rows = c.fetchall()
     db.close()
     return rows
@@ -83,10 +83,11 @@ def reportMatch(winner, loser):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
-    db, cursor = connect()
-    query = "INSERT INTO matches (winner, loser) VALUES (%s, %s);"
+    db = connect()
+    c = db.cursor()
+    query = "INSERT INTO Matches (winner, loser) VALUES (%s, %s);"
     parameter = (winner, loser,)
-    cursor.execute(query, parameter)
+    c.execute(query, parameter)
     db.commit()
     db.close()
 
